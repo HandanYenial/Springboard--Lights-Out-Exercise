@@ -1,8 +1,9 @@
 .Cell {
-  height: 100px;
-  width: 100px;
+  height: 50px;
+  width: 50px;
   background-color: darkgray;
   cursor: pointer;
+  border: 1px solid black;
 }
 
 .Cell-lit {

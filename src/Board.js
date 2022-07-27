@@ -3,46 +3,38 @@ import Cell from "./Cell";
 import "./Board.css";
 
 /** Game board of Lights out.
- *
  * Properties:
- *
  * - nrows: number of rows of board
  * - ncols: number of cols of board
  * - chanceLightStartsOn: float, chance any cell is lit at start of game
- *
  * State:
- *
  * - board: array-of-arrays of true/false
- *
  *    For this board:
- *       .  .  .
+         .  .  .
  *       O  O  .     (where . is off, and O is on)
  *       .  .  .
  *
- *    This would be: [[f, f, f], [t, t, f], [f, f, f]]
- *
- *  This should render an HTML table of individual <Cell /> components.
- *
- *  This doesn't handle any clicks --- clicks are on individual cells
- *
+ * This would be: [[f, f, f], [t, t, f], [f, f, f]]
+ * This should render an HTML table of individual <Cell /> components.
+ * This doesn't handle any clicks --- clicks are on individual cells
  **/
 
 function Board({ nrows = 5, ncols = 5, chanceLightStartsOn = 0.25}) {
   const [board, setBoard] = useState(createBoard());
 
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
+  // TODO: create array-of-arrays of true/false values
   function createBoard() {
     let initialBoard = [];
 
-    for (let y=0; y < nrows; y++){
+    for (let y = 0; y < nrows ; y++){
       let row =[];
-      for (let x = 0; x < ncols; x++){
+      for (let x = 0; x < ncols ; x++){
       //initially I thought it could be initialBoard.push(false) so all cells would be off 
       row.push(Math.random() < chanceLightStartsOn);
       }
- 
       initialBoard.push(row);
-    // TODO: create array-of-arrays of true/false values
+    }
     return initialBoard;
   }
   //So for each row there will be columns of cells that will be by chance(Math.random) lit or unlit.
@@ -97,7 +89,7 @@ function Board({ nrows = 5, ncols = 5, chanceLightStartsOn = 0.25}) {
   // if the game is won, just show a winning msg & render nothing else
   if (hasWon()) {
     return (
-    <div className="board">
+    <div className="win">
       You win!
     </div>
     );
@@ -108,18 +100,20 @@ function Board({ nrows = 5, ncols = 5, chanceLightStartsOn = 0.25}) {
   // make table board
   let tableBoard =[]; //empty array, we'll push rows and columns into this
   //better to push row and for each row push column into the row
-  for( let x = 0 ; x < nrows ; x++){
+  for( let y = 0 ; y < nrows ; y++){
     let row = [];
-    for(let y = 0 ; y < ncols ; y++){
+    for(let x = 0 ; x < ncols ; x++){
       let coord = `${y} - ${x}`;
       row.push(
-        <Cell key ={ coord }
+        <Cell 
+              key ={ coord }
               isLit = { board[y][x] }
               flipCellsAroundMe = { () => flipCellsAround( coord ) }
         />
       ) ;
     }
-    tableBoard.push(row);
+    //I tried tableBoard.push(row) but it didn't make columns, it only made rows.
+    tableBoard.push( <tr key={y}>{row}</tr> );
   }
   
   return (
@@ -130,13 +124,12 @@ function Board({ nrows = 5, ncols = 5, chanceLightStartsOn = 0.25}) {
         </div>
       </div>
       <table>
-        <tbody>
+        <tbody className = "Board-table">
           {tableBoard}
         </tbody>
       </table>
     </div>
   );
- }
 }
 
 
