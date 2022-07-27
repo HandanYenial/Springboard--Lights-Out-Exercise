@@ -33,21 +33,30 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
   function createBoard() {
     let initialBoard = [];
-    let nrows = 3;
-    let ncols = 3;
-
+    
     for (let row = 0; row < nrows; row++) {
-      initialBoard.push(false);
-    }
-    for (let col=0; col < ncols; col++) {
-      initialBoard.push(false);
-    }
+      let row =[];
+      for (let col=0; col < ncols; col++) {
+        //initially I thought it could be initialBoard.push(false) so all cells would be off 
+        initialBoard.push(Math.random() < chanceLightStartsOn);
+      }
+      initialBoard.push(row);
     // TODO: create array-of-arrays of true/false values
     return initialBoard;
   }
+  //So for each row there will be columns of cells that will be by chance(Math.random) lit or unlit.
 
+  
   function hasWon() {
     // TODO: check the board in state to determine whether the player has won.
+    //The puzzle is won when when all of the lights are turned off.
+    //meanning to win all lights need to be false. 
+    //const[board,setBoard] = useState((createBoard())); the initial value of the state will be randomly 
+    //lit and unlit board --- createBoard is giving us this. 
+    //So we need to check if all of the lights are off.
+    if (board.every(row => row.every(cell => cell === false))) {
+      return true;
+    } //.every() method return a boolean value. If all of the elements in the array are true, it will return true.
   }
 
   function flipCellsAround(coord) {
