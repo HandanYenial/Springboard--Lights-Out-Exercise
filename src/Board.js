@@ -72,18 +72,36 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
       };
 
       // TODO: Make a (deep) copy of the oldBoard
+      // A deep copy means that all values of the new variable are copied and disconnected
+      // from the old/original variable. So if you make any cahnges in the new or old copy they will not affect each other.
+      //One way to make a deep copy of a JavaScript object, if it can be serialized, 
+      //is to use JSON.stringify() to convert the object to a JSON string, and then JSON.parse()
+      // to convert the string back into a (completely new) JavaScript object(mdn)
+      const boardCopy = JSON.parse(JSON.stringify(oldBoard));
+
 
       // TODO: in the copy, flip this cell and the cells around it
-
+      function flipCopyCell(y, x, boardCopy){
+        flipCell(y, x, boardCopy); //flips the cell itself
+        flipCell(y - 1, x, boardCopy); //flips the cell above
+        flipCell(y + 1, x, boardCopy); //flips the cell below
+        flipCell(y, x - 1, boardCopy); //flips the cell to the left
+        flipCell(y, x + 1, boardCopy); //flips the cell to the right
+      }
       // TODO: return the copy
+      return boardCopy;
     });
   }
 
   // if the game is won, just show a winning msg & render nothing else
+  if (hasWon()) {
+    return <div className="board">You win!</div>;
+  }
 
   // TODO
 
   // make table board
+
 
   // TODO
 }
