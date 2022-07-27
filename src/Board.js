@@ -27,20 +27,21 @@ import "./Board.css";
  *
  **/
 
-function Board({ nrows, ncols, chanceLightStartsOn }) {
+function Board({ nrows = 5, ncols = 5, chanceLightStartsOn = 0.25}) {
   const [board, setBoard] = useState(createBoard());
 
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
   function createBoard() {
     let initialBoard = [];
-    
-    for (let row = 0; row < nrows; row++) {
-      let col =[];
-      for (let col=0; col < ncols; col++) {
-        //initially I thought it could be initialBoard.push(false) so all cells would be off 
-        initialBoard.push(Math.random() < chanceLightStartsOn);
+
+    for (let y=0; y < nrows; y++){
+      let row =[];
+      for (let x = 0; x < ncols; x++){
+      //initially I thought it could be initialBoard.push(false) so all cells would be off 
+      row.push(Math.random() < chanceLightStartsOn);
       }
-      initialBoard.push(col);
+ 
+      initialBoard.push(row);
     // TODO: create array-of-arrays of true/false values
     return initialBoard;
   }
@@ -66,7 +67,7 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
 
       const flipCell = (y, x, boardCopy) => {
         // if this coord is actually on board, flip it
-        if (x >= 0 && y < nrows && x >= 0 && x < ncols) {
+        if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
           boardCopy[y][x] = !boardCopy[y][x];
         }
       };
