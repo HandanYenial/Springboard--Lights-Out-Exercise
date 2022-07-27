@@ -35,12 +35,12 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
     let initialBoard = [];
     
     for (let row = 0; row < nrows; row++) {
-      let row =[];
+      let col =[];
       for (let col=0; col < ncols; col++) {
         //initially I thought it could be initialBoard.push(false) so all cells would be off 
         initialBoard.push(Math.random() < chanceLightStartsOn);
       }
-      initialBoard.push(row);
+      initialBoard.push(col);
     // TODO: create array-of-arrays of true/false values
     return initialBoard;
   }
@@ -61,15 +61,12 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
 
   function flipCellsAround(coord) {
     setBoard(oldBoard => {
+      
       const [y, x] = coord.split("-").map(Number);
 
       const flipCell = (y, x, boardCopy) => {
         // if this coord is actually on board, flip it
-        if (y >= 0 && y < nrows && x >= 0 && x < ncols) {
-          boardCopy[y][x] = !boardCopy[y][x];
-        }
-
-        if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
+        if (x >= 0 && y < nrows && x >= 0 && x < ncols) {
           boardCopy[y][x] = !boardCopy[y][x];
         }
       };
@@ -84,16 +81,16 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
 
 
       // TODO: in the copy, flip this cell and the cells around it
-      function flipCopyCell(y, x, boardCopy){
+      
         flipCell(y, x, boardCopy); //flips the cell itself
         flipCell(y - 1, x, boardCopy); //flips the cell above
         flipCell(y + 1, x, boardCopy); //flips the cell below
         flipCell(y, x - 1, boardCopy); //flips the cell to the left
         flipCell(y, x + 1, boardCopy); //flips the cell to the right
-      }
-      // TODO: return the copy
-      return boardCopy;
-    });
+
+         // TODO: return the copy
+        return boardCopy;
+      });
   }
 
   // if the game is won, just show a winning msg & render nothing else
@@ -110,12 +107,13 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
   // make table board
   let tableBoard =[]; //empty array, we'll push rows and columns into this
   //better to push row and for each row push column into the row
-  for( let row =0 ; row < nrows ; row++){
+  for( let x = 0 ; x < nrows ; x++){
     let row = [];
-    for(let col=0 ; col < ncols ; col++){
+    for(let y = 0 ; y < ncols ; y++){
+      let coord = `${y} - ${x}`;
       row.push(
-        <Cell
-              isLit = { board[row][col] }
+        <Cell key ={ coord }
+              isLit = { board[y][x] }
               flipCellsAroundMe = { () => flipCellsAround( coord ) }
         />
       ) ;
