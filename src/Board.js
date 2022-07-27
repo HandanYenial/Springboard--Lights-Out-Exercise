@@ -65,6 +65,9 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
 
       const flipCell = (y, x, boardCopy) => {
         // if this coord is actually on board, flip it
+        if (y >= 0 && y < nrows && x >= 0 && x < ncols) {
+          boardCopy[y][x] = !boardCopy[y][x];
+        }
 
         if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
           boardCopy[y][x] = !boardCopy[y][x];
@@ -95,15 +98,47 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
 
   // if the game is won, just show a winning msg & render nothing else
   if (hasWon()) {
-    return <div className="board">You win!</div>;
+    return (
+    <div className="board">
+      You win!
+    </div>
+    );
   }
 
   // TODO
 
   // make table board
-
-
-  // TODO
+  let tableBoard =[]; //empty array, we'll push rows and columns into this
+  //better to push row and for each row push column into the row
+  for( let row =0 ; row < nrows ; row++){
+    let row = [];
+    for(let col=0 ; col < ncols ; col++){
+      row.push(
+        <Cell
+              isLit = { board[row][col] }
+              flipCellsAroundMe = { () => flipCellsAround( coord ) }
+        />
+      ) ;
+    }
+    tableBoard.push(row);
+  }
+  
+  return (
+    <div>
+      <div className = "board-title">
+        <div>
+          Lights Out!
+        </div>
+      </div>
+      <table>
+        <tbody>
+          {tableBoard}
+        </tbody>
+      </table>
+    </div>
+  );
+ }
 }
+
 
 export default Board;
